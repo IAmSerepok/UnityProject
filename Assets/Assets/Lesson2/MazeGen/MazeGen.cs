@@ -1,18 +1,27 @@
 using Unity.Collections;
 using UnityEngine;
 using System.Linq;
+using System.Collections.Generic;
 
 public class MazeGen : MonoBehaviour
 {
     [SerializeField] private GameObject Tile;
     [SerializeField] private GameObject Wall;
 
+    [SerializeField] private GameObject Coin;
+
     [SerializeField] private Vector2Int GridSize;
+    [SerializeField] private float coinSpawnChance = 0.3f;
+    
 
     private int[,] matrix;
     private Vector2 offsets;
     int nx, ny;
     Vector2Int dir;
+
+    // Список для хранения всех монеток
+    private List<GameObject> coins = new List<GameObject>();
+
 
     Vector2Int[] directions = {
         new Vector2Int(0, 1),
@@ -45,6 +54,8 @@ public class MazeGen : MonoBehaviour
         offsets = new Vector2(Tile.transform.localScale.x, Tile.transform.localScale.z);
 
         GenerateCell(0, 0);
+
+        GenerateCoins();
     }
 
     private void GenerateCell(int x, int y)
@@ -61,7 +72,7 @@ public class MazeGen : MonoBehaviour
         int[] shuffledIndex = index.OrderBy(x => Random.value).ToArray(); // Выбираем направления случайным способом
         foreach (int ind in shuffledIndex)
         {
-            
+
             dir = directions[ind];
             nx = x + dir.x;
             ny = y + dir.y;
@@ -92,6 +103,48 @@ public class MazeGen : MonoBehaviour
                     GenerateCell(nx, ny);
                 }
             }
+        }
+    }
+
+
+    // Метод для генерации монеток
+    private void GenerateCoins()
+    {
+        for (int x = 0; x < GridSize.x; x++)
+        {
+            for (int y = 0; y < GridSize.y; y++)
+            {
+
+                if (Random.value < coinSpawnChance && !(x == 0 && y == 0))
+                {
+                    SpawnCoin(x, y);
+                }
+            }
+        }
+    }
+
+    private void SpawnCoin(int x, int y)
+    {
+        Vector3 coinPosition = transform.position + new Vector3(
+            x * offsets.x,
+            Tile.transform.localScale.y + 0.5f, // Выше пола
+            y * offsets.y
+        );
+
+        GameObject coin = Instantiate(Coin, coinPosition, Quaternion.identity);
+        coin.transform.parent = transform; // Делаем монетку дочерним объектом лабиринта
+        coins.Add(coin); // Добавляем в список для управления
+    }
+    
+    public void CollectCoin(GameObject coin)
+    {
+        if (coins.Contains(coin))
+        {
+            coins.Remove(coin);
+            Destroy(coin);
+            Debug.Log("Монетка собрана");
+            
+            // TODO добавить логику очков здесь
         }
     }
 }
