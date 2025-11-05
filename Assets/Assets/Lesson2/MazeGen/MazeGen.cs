@@ -12,6 +12,12 @@ public class MazeGen : MonoBehaviour
 
     [SerializeField] private Vector2Int GridSize;
     [SerializeField] private float coinSpawnChance = 0.3f;
+
+    [Header("Опасные объекты")]
+    [SerializeField] private GameObject DamageTile;
+    [SerializeField] private GameObject PoisonWall;
+    [SerializeField] [Range(0f, 1f)] private float damageTileChance = 0.1f;
+    [SerializeField] [Range(0f, 1f)] private float poisonWallChance = 0.2f;
     
 
     private int[,] matrix;
@@ -56,6 +62,38 @@ public class MazeGen : MonoBehaviour
         GenerateCell(0, 0);
 
         GenerateCoins();
+
+        GenerateHazardousObjects();
+    }
+
+    // Метод генерации опасных объектов
+    private void GenerateHazardousObjects()
+    {
+        for (int x = 0; x < GridSize.x; x++)
+        {
+            for (int y = 0; y < GridSize.y; y++)
+            {
+                // Пол
+                if (DamageTile != null && Random.value < damageTileChance && !(x == 0 && y == 0))
+                {
+                    Vector3 position = transform.position + new Vector3(x * offsets.x, 0.1f, y * offsets.y);
+                    Instantiate(DamageTile, position, transform.rotation).transform.parent = transform;
+                }
+            }
+        }
+        
+        // Модифицируем существующие стены, добавляя ядовитые
+        foreach (Transform child in transform)
+        {
+            if (child.CompareTag("Wall") && PoisonWall != null && Random.value < poisonWallChance)
+            {
+                // Заменяем обычную стену на ядовитую
+                Vector3 position = child.position;
+                Quaternion rotation = child.rotation;
+                Destroy(child.gameObject);
+                Instantiate(PoisonWall, position, rotation).transform.parent = transform;
+            }
+        }
     }
 
     private void GenerateCell(int x, int y)

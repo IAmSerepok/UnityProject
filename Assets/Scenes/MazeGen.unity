@@ -144,8 +144,16 @@ PrefabInstance:
       value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 4008207053827645118, guid: 7d02da8cdd66e4549a61ca1da2fc14db, type: 3}
+      propertyPath: jumpSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4008207053827645118, guid: 7d02da8cdd66e4549a61ca1da2fc14db, type: 3}
       propertyPath: lookSpeed
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4008207053827645118, guid: 7d02da8cdd66e4549a61ca1da2fc14db, type: 3}
+      propertyPath: moveSpeed
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4008207053827645118, guid: 7d02da8cdd66e4549a61ca1da2fc14db, type: 3}
       propertyPath: rotationSpeed
@@ -217,6 +225,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2206807890028431840, guid: 7d02da8cdd66e4549a61ca1da2fc14db, type: 3}
       insertIndex: -1
       addedObject: {fileID: 832691365}
+    - targetCorrespondingSourceObject: {fileID: 2206807890028431840, guid: 7d02da8cdd66e4549a61ca1da2fc14db, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 832691372}
   m_SourcePrefab: {fileID: 100100000, guid: 7d02da8cdd66e4549a61ca1da2fc14db, type: 3}
 --- !u!1 &821469289
 GameObject:
@@ -252,6 +263,10 @@ MonoBehaviour:
   Coin: {fileID: 8579925292899462747, guid: 9e3005e4b0b56ab429ac7dec44d33b13, type: 3}
   GridSize: {x: 10, y: 10}
   coinSpawnChance: 0.3
+  DamageTile: {fileID: 5003222646477398198, guid: 61d31609a3a32054387d8219afab1de7, type: 3}
+  PoisonWall: {fileID: 1177220139259500882, guid: c653897ea05028749b2ada7d558667f5, type: 3}
+  damageTileChance: 0.1
+  poisonWallChance: 0.2
 --- !u!4 &821469291
 Transform:
   m_ObjectHideFlags: 0
@@ -310,6 +325,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6712373940506844017, guid: 7d02da8cdd66e4549a61ca1da2fc14db, type: 3}
   m_PrefabInstance: {fileID: 62917033}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &832691372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832691363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b21cdd3f0bd2fc4690f1cbdb4ff247e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  invincibilityTime: 0.5
 --- !u!1 &957020392
 GameObject:
   m_ObjectHideFlags: 0
@@ -417,9 +446,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 832691371}
-  offset: {x: 0, y: 10, z: 0}
+  offset: {x: 0, y: 10, z: -2}
   smoothSpeed: 0.1
-  tiltAngle: 90
+  tiltAngle: 80
 --- !u!114 &957020397
 MonoBehaviour:
   m_ObjectHideFlags: 0
