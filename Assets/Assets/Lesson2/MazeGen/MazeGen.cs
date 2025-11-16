@@ -17,7 +17,13 @@ public class MazeGen : MonoBehaviour
     [SerializeField] private GameObject DamageTile;
     [SerializeField] private GameObject PoisonWall;
     [SerializeField] [Range(0f, 1f)] private float damageTileChance = 0.1f;
-    [SerializeField] [Range(0f, 1f)] private float poisonWallChance = 0.2f;
+    [SerializeField][Range(0f, 1f)] private float poisonWallChance = 0.2f;
+
+    [Header("Турели")]
+    [SerializeField] private GameObject turretPrefab;
+    [SerializeField][Range(0f, 1f)] private float turretSpawnChance = 0.2f;
+    [SerializeField] private int minTurrets = 1;
+    [SerializeField] private int maxTurrets = 5;
     
 
     private int[,] matrix;
@@ -60,10 +66,89 @@ public class MazeGen : MonoBehaviour
         offsets = new Vector2(Tile.transform.localScale.x, Tile.transform.localScale.z);
 
         GenerateCell(0, 0);
-
         GenerateCoins();
-
         GenerateHazardousObjects();
+        GenerateTurrets(); 
+    }
+
+    // Метод для генерации турелей
+    private void GenerateTurrets()
+    {
+        if (turretPrefab == null) return;
+
+        int turretCount = Random.Range(minTurrets, maxTurrets + 1);
+        int placedTurrets = 0;
+        int attempts = 0;
+        int maxAttempts = 100;
+
+        while (placedTurrets < turretCount && attempts < maxAttempts)
+        {
+            attempts++;
+            
+            // Выбираем случайную позицию в лабиринте
+            int x = Random.Range(0, GridSize.x);
+            int y = Random.Range(0, GridSize.y);
+            
+            // Проверяем, можно ли поставить турель в этой позиции
+            if (CanPlaceTurret(x, y))
+            {
+                Vector3 position = transform.position + new Vector3(x * offsets.x, 0.5f, y * offsets.y);
+                GameObject turret = Instantiate(turretPrefab, position, Quaternion.identity);
+                turret.transform.parent = transform;
+                
+                // Направляем турель вдоль стены
+                Vector3 shootDirection = GetTurretDirection(x, y);
+                Turret turretComponent = turret.GetComponent<Turret>();
+                if (turretComponent != null)
+                {
+                    turretComponent.SetDirection(shootDirection);
+                }
+                
+                placedTurrets++;
+            }
+        }
+    }
+
+    // Проверяем, можно ли поставить турель в указанной позиции
+    private bool CanPlaceTurret(int x, int y)
+    {
+        // Не ставим турель на стартовой позиции
+        if (x == 0 && y == 0) return false;
+        
+        // Проверяем случайный шанс
+        if (Random.value > turretSpawnChance) return false;
+        
+        // Проверяем, что есть хотя бы одно направление для стрельбы
+        Vector3 direction = GetTurretDirection(x, y);
+        return direction != Vector3.zero;
+    }
+
+    // Определяем направление стрельбы турели (вдоль стены)
+    private Vector3 GetTurretDirection(int x, int y)
+    {
+        // Получаем информацию о стенах в этой клетке
+        int cellWalls = matrix[x, y];
+        
+        // Список возможных направлений (вдоль проходов)
+        List<Vector3> possibleDirections = new List<Vector3>();
+        
+        // Проверяем каждое направление
+        for (int i = 0; i < 4; i++)
+        {
+            // Если стены нет (проход), то можно стрелять в этом направлении
+            if (((cellWalls - 1) >> i) % 2 == 0)
+            {
+                possibleDirections.Add(new Vector3(directions[i].x, 0, directions[i].y));
+            }
+        }
+        
+        // Выбираем случайное направление из возможных
+        if (possibleDirections.Count > 0)
+        {
+            return possibleDirections[Random.Range(0, possibleDirections.Count)];
+        }
+        
+        return Vector3.zero;
     }
 
     // Метод генерации опасных объектов
@@ -92,7 +177,7 @@ public class MazeGen : MonoBehaviour
                 Quaternion rotation = child.rotation;
                 Destroy(child.gameObject);
                 Instantiate(PoisonWall, position, rotation).transform.parent = transform;
-            }
+            } 
         }
     }
 

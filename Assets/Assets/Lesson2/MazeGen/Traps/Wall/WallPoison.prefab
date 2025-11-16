@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 2327631810205583634}
   - component: {fileID: 8668989913778830154}
   - component: {fileID: 2279124220647521841}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallPoison
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 0.1}
+  m_LocalScale: {x: 1, y: 2, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5766421698931095113}

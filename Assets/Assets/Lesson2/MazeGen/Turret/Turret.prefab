@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 6671899354300231209}
   - component: {fileID: 2874545302293562769}
   - component: {fileID: 1711426142454352309}
-  - component: {fileID: -2528280997987293440}
+  - component: {fileID: -7734787388809812789}
   m_Layer: 0
-  m_Name: Spike
-  m_TagString: Untagged
+  m_Name: Turret
+  m_TagString: Turret
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.1, z: 0.5}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5003222646477398198}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &2874545302293562769
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 19ef4de805fe9d94282e1c1ec72c1cfc, type: 2}
+  - {fileID: 2100000, guid: c4bed03443e5f2743b95970c0f6f1c13, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -109,7 +109,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-2528280997987293440
+--- !u!114 &-7734787388809812789
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,8 +118,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5003222646477398198}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b475e52185bb1bb4bbc1e8c5fa4f6989, type: 3}
+  m_Script: {fileID: 11500000, guid: a273d6450daa5f5418dad8b398fa68f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 10
-  damageCooldown: 1
+  projectilePrefab: {fileID: 5003222646477398198, guid: 6404542cae762ed4298ff15dee42d479, type: 3}
+  fireRate: 2
+  projectileSpeed: 8
+  damage: 5
+  shootDirection: {x: 0, y: 0, z: 1}
+  detectionRange: 10
+  rotationSpeed: 5
